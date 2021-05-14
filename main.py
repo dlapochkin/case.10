@@ -3,6 +3,11 @@ from random import randint
 
 
 def prode(stats):
+    '''
+    функция- запуск зонда
+    :param stats:
+    :return:
+    '''
     if stats['зонд'] > 0:
         stats['зонд'] -= 1
         t=randint(0,1)
@@ -22,20 +27,40 @@ def prode(stats):
     return stats
 
 def name():
+    '''
+     генерирует рандомное имя
+    :return:
+    '''
     letters = string.ascii_lowercase
     rand_string = ''.join(random.sample(letters, 3))
     return 'NSU'+rand_string
+
 def landing(stats):
+     '''
+      приземление
+     :param stats:
+     :return: 
+     '''
     if stats['двигатель']==0:
         print('Отсек двигатель неисправен')
     else:
         t=randint(0,2)
-        if stats['броня']==0 or stats['']
+        if stats['навигация']==0:
+            if stats['броня']==0:
+
+            else:
+                stats['броня']==0
+
         if t==0:
             print('На планете пусто')
         else:
 
 def planet(stats):
+    '''
+    выбор что сделать с планетой
+    :param stats:
+    :return:
+    '''
     planet_name=name()
     print('В этой системе найден объект',planet_name)
     r=int(input('''Вы можете:
