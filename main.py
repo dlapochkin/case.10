@@ -1,58 +1,55 @@
-import random
-
-stats = {'score': 1, 'treasury': 10, 'provisions': 10, 'land': 10, 'military': 2,
-         'population': 5, 'distemper': 0, 'yield_coef': 0.1}
+from random import *
 
 
-def move(stats):
-    stats = incomes(stats)
-    events = {}
-    actions = random.randint(1, 5)
-    events_copy = events.copy()
+def main():
+    stats = {'ходы': 0, 'металл': 0, 'алюминий': 0, 'фотоэлемент': 0, 'зонд': 0, 'жизнеобеспечение': 0, 'двигатель': 0,
+             'связь': 0, 'навигация': 0, 'ремонт': 0, 'броня': 1}
+    print('все плохо')
+    #тут предисловие
+    #правила
+    #совет: первым делом жизнеобеспечение
+    statistics(stats)
+    wait = input()
+    print('')
+    stats['ходы'] += 1
     move(stats)
 
 
 def statistics(stats):
-    '{:13s}{:22s}{:19s}'.format('Наименование', 'Температура плавления', 'Температура кипения')
-    print('{:-^121s}'.format('Текущая статистика'))
-    print('|{:^19s}|{:^19s}|{:^19s}|{:^19s}|{:^19s}|{:^19s}|'.format('Казна', 'Провизия',
-                                                             'Пахотные земли', 'Народ', 'Военная сила', 'Смута'))
-    print('{:-^121s}'.format(''))
-    print('|{:^19d}|{:^19d}|{:^19d}|{:^19d}|{:^19d}|{:^19.0%}|'.format(stats['treasury'], stats['provisions'], stats['land'],
-                                                             stats['population'], stats['military'], stats['distemper']))
-    print('{:-^121s}'.format(''))
+    print('{:-^81s}{:19s}{:-^21s}'.format('Склад', '', 'Жизнеобеспечение'))
+    print('|{:19s}|{:19s}|{:19s}|{:19s}|{:19s}|{:19s}|'.format(' Металл: '+str(stats['металл']),
+                                                               ' Алюминий: '+str(stats['алюминий']),
+                                                               ' Фотоэлементы: '+str(stats['фотоэлемент']),
+                                                               ' Зонды: '+str(stats['зонд']), '',
+                                                               ' Ходов доступно: '+str(stats['ходы'])))
+    print('{:-^81s}{:19s}{:-^21s}'.format('', '', ''))
+    print('{:-^121}'.format('Системы корабля'))
+    ship = list(stats.values())[5:]
+    state = []
+    for x in ship:
+        if x == 1:
+            state.append('стабильно')
+        else:
+            state.append('в критическом состоянии')
+    print('|{:<119}|'.format(' Система жизнеобеспечения: '+state[0]))
+    print('|{:<119}|'.format(' Двигательный отсек: ' + state[1]))
+    print('|{:<119}|'.format(' Система связи: ' + state[2]))
+    print('|{:<119}|'.format(' Система навигации: ' + state[3]))
+    print('|{:<119}|'.format(' Ремонтный отсек: ' + state[4]))
+    print('|{:<119}|'.format(' Корпус: ' + state[5]))
+    print('{:-^121}'.format(''))
 
 
-def incomes(stats):
-    i = random.randint(0, 3)
-    if i == 0:
-        stats = up_harvest(stats)
-    elif i == 1:
-        stats = down_harvest(stats)
-    else:
-        stats = harvest(stats)
-    stats['treasury'] += stats['population'] * 2
-    statistics(stats)
-    return stats
+
+def move(stats):
+    if stats['ходы'] == 0:
+        print('game over')
+    elif stats['жизнеобеспечение'] == stats['двигатель'] == stats['связь'] == stats['навигация'] == stats['ремонт'] == stats['броня'] == 1:
+        print('you won')
+    events = {}
+    stats = events[randint(0, len(events) - 1)](stats)
 
 
-def harvest(stats):
-    stats['provisions'] += int(stats['land'] * 10 * (1 + stats['yield_coef']))
-    return stats
 
 
-def up_harvest(stats):
-    coef = random.randint(5, 20)
-    print('Этот год выдался высокоурожайным. Получено на ', coef, '% больше продовольствия.', sep='')
-    stats['provisions'] += int(stats['land'] * 10 * (1 + stats['yield_coef'] + coef / 100))
-    return stats
-
-
-def down_harvest(stats):
-    coef = random.randint(5, 20)
-    print('Этот год выдался низкоурожайным. Получено на ', coef, '% меньше продовольствия.', sep='')
-    stats['provisions'] += int(stats['land'] * 10 * (1 + stats['yield_coef'] - coef / 100))
-    return stats
-
-
-move(stats)
+main()
