@@ -83,7 +83,7 @@ d = int(c) * value_sale
 param['Казна'] -= d
 print(param)'''
 
-
+'''
 stats = stats = {'ходы': 0, 'металл': 3, 'алюминий': 4, 'фотоэлемент': 0, 'зонд': 0, 'жизнеобеспечение': 0, 'двигатель': 0, 'связь': 0, 'навигация': 0, 'ремонт': 0, 'броня': 0}
 def repair(stats):
     print('Стоимость ремонта систем корабля:')
@@ -115,8 +115,7 @@ def repair(stats):
         else:
             print('Неверно введено значение. Попробуйте еще раз.')
         return repair(stats)
-
-        print(stats.get('алюминий'))
+    #ремонт корабля
     elif a == 1:
         #функция работает,не работает
         print('Стоимость ремонта систем корабля:')
@@ -214,13 +213,140 @@ def repair(stats):
     return stats
 repair(stats)
 print(stats)
+'''
 
 
 
+'''
+n = int(input())
+dict = {}
+for i in range(0,n):
+    a = list(input().split())
+    key = a[0]
+    v = a[1:]
+    dict[key] = v
+s = input()
+print(dict)
+if s in dict.values():
+    print(1)
+    for k, v in dict.items():
+        if v == s:
+            print(k)'''
 
 
+import random
+
+#Стратегия. Герои: лучник(наносит ,20 жизней), варвар(наносит,40 жизней).Урон постоянен, Кидаются кости (5 до 30)(урон).Урон наносится
+print('-'* 176)
+print('Добро пожаловать. У вас есть два героя. В начале игры вам дается 100 монет.\nВаша задача развить своих героев и напасть на своего соперника (уровень героев соперника неизвестен).\nЗа монеты (100 монет) вы можете покупать Коллекторы, которые будут с каждым ходом добавлять 5 монет')
+print('-'* 176)
+def main(invent,s):
+    s += 1
+    print('Ход:',s)
+    collector(invent)
+    army(invent)
+    return main(invent,s)
+
+def collector(invent):
+    # k отвечает за увеличение монет
+    k = invent.get('Коллектор')
+    invent['Монеты'] += k * 5
+    print('Хотите купить коллектор за 100 монет?\n1. Да\n2. Нет и продолжить игру.')
+    a = int(input('Введите цифру\n'))
+    coin = invent.get('Монеты')
+    if a == 1:
+
+        if coin > 99:
+            print(coin)
+            invent['Монеты'] -= 100
+            invent['Коллектор'] += 1
+            print('Вы успешно купили коллектор.')
+            print(invent)
+            return coin
+
+        elif coin < 100:
+            print('Недостаточно средств.')
+            return coin
+
+    elif a == 2:
+        # Начало следующего вопроса
+        b = input('Введите любое значение для продолжения\n')
+        return invent
+    else:
+        print('Неверно введена цифра. Попробуйте заново')
+        collector(invent)
+
+def army(invent):
+    print('-' * 176)
+    print('Хотите улучшить своего героя?\n1. Да.\n2. Нет и продолжить')
+    a = int(input('Введите цифру\n'))
+    if a == 1:
+        print('-' * 176)
+        print('Войска:\nВарвар -',invent.get('Варвар'),'жизней\nЛучник -',invent.get('Лучник'),'жизней')
+        print('-' * 176)
+        print('Какого героя вы хотите улучшить?\n1. Варвар (50 монет - +10 жизней).\n2. Лучник(25 монет - +5 жизней).')
+        b = int(input('Введите цифру\n'))
+        if b == 1 and invent['Монеты'] > 49:
+            invent['Варвар'] += 10
+            invent['Монеты'] -= 50
+            return invent
+        elif b == 1 and invent['Монеты'] < 50:
+            print('Недостаточно средств.')
+            return invent
+
+        elif b == 2 and invent['Монеты'] > 49:
+            invent['Лучник'] += 5
+            invent['Монеты'] -= 25
+            return invent
+        elif b == 2 and invent['Монеты'] < 50:
+            print('Недостаточно средств.')
+            return invent
+        else:
+            print('Неверно введена цифра. Попробуйте заново')
+            army(invent)
+
+    elif a == 2:
+        b = input('Введите любое значение для продолжения\n')
+        return invent
+    else:
+        print('Неверно введена цифра. Попробуйте заново')
+        army(invent)
 
 
+def battle(invent):
+    print('Хотите начать сражение?\n1. Да\n2. Нет и закончить ход.')
+    a = int(input('Введите цифру\n'))
+    if a == 1:
+        print('Помните,Варвар всегда бежит первым, а значит весь урон будет наноситься ему.')
+        opponent = {'Варвар': 20, 'Лучник': 10}
+        opponent['Варвар'] = random.randint(invent['Варвар']-10,invent['Варвар']+10)
+        opponent['Лучник'] = random.randint(invent['Лучник']-5,invent['Лучник']+5)
+        #кидаются кости первый кидает соперник
+        while True:
+            b = random.randint(5,30)
+            if invent['Варвар'] != 0:
+                invent['Варвар'] -= b
+                if invent['Варвар'] == 0:
+                    print('Варвар умер.')
+            else:
+                invent['Лучник'] -= b
+                if invent['Лучник'] == 0:
+                    print('Лучник умер.')
+                    break
+
+            b = input('Для того, чтобы кинуть кости - введите любое значение')
+            b = random.randint(5,30)
+
+    elif a == 2:
+        b = input('Введите любое значение для продолжения\n')
+        return invent
+    else:
+        print('Неверно введена цифра. Попробуйте заново')
+        battle(invent)
+
+s = 0
+invent = {'Варвар': 20, 'Лучник': 10, 'Монеты': 100,'Коллектор': 0}
+main(invent, s)
 
 
 
