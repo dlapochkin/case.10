@@ -147,11 +147,62 @@ def repair(stats):
 
 
     return stats
-repair(stats)
 
+def pirate(stats):
+    al = random.randint(0,2)
+    met = random.randint(2,3)
+    pht = random.randint(0,1)
 
+    grab = {'al0':'','al1':' 1 алюминий','al2':'2 алюминия','met2': '2 металла','met3': '3 металла', 'pht0': '', 'pht1': '1 фотоэлемент'}
+    print('На вас напали космические пираты.\nПосле нападения у вас украли:',grab['al'+ str(al)],grab['met'+ str(met)],grab['pht'+ str(pht)])
+    stats['алюминий'] -= al
+    stats['металл'] -= met
+    stats['фотоэлемент'] -= pht
+    return stats
 
-
+def exchange(stats):
+    print('Вы встретили торговца.Хотите с ним обменяться ресурсами?\n1. Да.\n2. Нет и выйти.')
+    r = random.randint(1,2)
+    #0 - алюминий за металл, 1 - металл за алюминий
+    choice = {1: 'Обмен: 1 алюминий за 2 металла', 2:'Обмен: 1 металл за 1 алюминий'}
+    invent = {1:'алюминия',2:'металла'}
+    a = int(input('Введите значение:\n'))
+    if a == 1:
+        print(choice[r],'Хотите обменяться?','1. Обменяться.\n2. Нет и выйти.',sep='\n')
+        b = int(input('Введите значение:\n'))
+        if b == 1:
+            if r == 1:
+                allow = stats['металл'] // 2
+                print('Введите количество алюминия. Доступно:',allow)
+                n = int(input())
+                if n <= allow:
+                    stats['металл'] -= 2 * n
+                    stats['алюминий'] += n
+                    print('Инвентарь: алюминий',stats['алюминий'],'металл',stats['металл'])
+                else:
+                    print('Недостаточно средств. Попробуйте еще раз.')
+                    return exchange(stats)
+            else:
+                print('Введите количество металла. Доступно:', stats['алюминий'])
+                n = int(input())
+                if n <= stats['алюминий']:
+                    stats['металл'] += n
+                    stats['алюминий'] -= n
+                    print('Инвентарь: алюминий', stats['алюминий'], 'металл', stats['металл'])
+                else:
+                    print('Недостаточно средств. Попробуйте еще раз.')
+                    return exchange(stats)
+        elif b == 2:
+            return stats
+        else:
+            print('Неверно введено значение. Попробуйте заново.')
+            return exchange(stats)
+    elif a == 2:
+        return stats
+    else:
+        print('Неверно введено значение. Попробуйте заново.')
+        return exchange(stats)
+exchange(stats)
 
 
 '''
