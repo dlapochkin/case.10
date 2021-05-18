@@ -1,88 +1,5 @@
 import random
 
-'''
-def main(stats):
-    score = 1
-    param = {'Казна': 100, 'Зерно': 1000, 'Земля': 10, 'Военные силы': 2,
-             'Население': 50, 'Смута': 0, 'Коэффициент урожайности': 0.1}
-    events = {}
-    param['Земля'] = 20
-def menu():
-    menu = {'Обмен валюты':'exchange()','Купить военную силу':'def ','Объявить войну':'start_war()'}
-#функция меняет деньги на зерно и обратно
-def exchange(stats):
-    print('Хотите обменять валюту?','1 - да, 2 - нет')
-    a = int(input())
-    if a == 1:
-        #цена десятка зерна в денежных единицах (покупка зерна)
-        value_seed = random.randint(10,15)
-        #цена одной денежной единицы в зернах (продажа зерна)
-        value_sale = random.randint(5,10)
-        print('-' * 178)
-        print(stats)
-        print('Купить десяток зерна - ', value_seed,'ден ед.','Нажмите 1')
-        print('Продать десяток зерна - ', value_sale,'ден ед.','Нажмите 2')
-        b = int(input())
-        if b == 1:
-            cb = int(input('Выберите количество '))
-            if cb * value_seed < stats['Казна']:
-                #сколько уйдет ден ед
-                db = cb * value_seed
-                stats['Казна'] -= db
-                #сколько прибавиться зерна
-                stats['Зерно'] += cb * 10
-                return stats
-            else:
-                print('Недостаточно средств. Введите заново')
-                exchange(stats)
-        if b == 2:
-            cs = int(input('Выберите количество зерна (в десятках)'))
-            if cs * 10 < stats['Зерно']:
-                #сколько придет ден ед
-                ds = cs * value_sale
-                stats['Казна'] -= ds
-                # сколько убавиться зерна
-                stats['Зерно'] += cs * 10
-                return stats
-            else:
-                print('Недостаточно зерна. Введите заново')
-                exchange(stats)
-        else:
-            print('Неверно введено значение. Введите заново')
-            exchange()
-    elif a == 2:
-        return
-    else:
-        print('Неверно введено значение. Введите заново')
-        exchange(stats)
-
-
-stats = {'Казна': 100, 'Зерно': 1000, 'Земля': 10, 'Военные силы': 2,
-             'Население': 50, 'Смута': 0, 'Коэффициент урожайности': 0.1}
-print(stats)
-
-'''
-
-
-
-
-#Черновик
-'''
-param = {'Казна': 100, 'Зерно': 1000, 'Земля': 10, 'Военные силы': 2,
-             'Население': 50, 'Смута': 0, 'Коэффициент урожайности': 0.1}
-#цена десятка зерна в денежных единицах (покупка зерна)
-value_seed = random.randint(10,15)
-#цена одной денежной единицы в зернах (продажа зерна)
-value_sale = random.randint(5,10)
-print('-' * 300)
-print('Купить десяток зерна - ', value_seed, ' ден ед')
-print('Продать десяток зерна - ', value_sale,' ден ед')
-c = input('Выберите количество ')
-#сколько уйдет ден ед
-d = int(c) * value_sale
-param['Казна'] -= d
-print(param)'''
-
 
 stats = {'ходы': 0, 'металл': 3, 'алюминий': 4, 'фотоэлемент': 0, 'зонд': 0, 'жизнеобеспечение': 0, 'двигатель': 0, 'связь': 0, 'навигация': 0, 'ремонт': 0, 'броня': 0}
 def repair(stats):
@@ -202,7 +119,7 @@ def exchange(stats):
     else:
         print('Неверно введено значение. Попробуйте заново.')
         return exchange(stats)
-exchange(stats)
+
 
 
 '''
@@ -223,9 +140,88 @@ if s in dict.values():
 
 
 
+#кр 180521
+
+import json
+#example
+'''
+r = {'is_claimed': 3, 'rating': 3.5}
+r = json.dumps(r)
+loaded_r = json.loads(r)
+loaded_r['rating'] #Output 3.5
+type(r) #Output str
+type(loaded_r) #Output dict
+'''
+#1
+#{"dog":1,"cat":2}
+'''
+r = json.loads(input())
+wrd = input()
+print(r[wrd])
+'''
+
+#2
+'''
+r = json.loads(input())
+#r = ([{"key1":[0,4,1],"key2":[3,-8,14,5]},{"key1":[1,7],"key2":[9,-13]},{"key2":[1,-1,1],"key3":[3]}])
+dict = {}
+
+for i in range(0,len(r)):
+    for key, value in r[i].items():
+        if key in dict:
+            dict[key] += int(sum(value))
+        else:
+            dict[key] = int(sum(value))
+print(json.dumps(dict))
+# конвертируем в JSON:
+# в результате получаем строк JSON:
+'''
+#3
+
+r = {"response":{"count":10,"items":[{"id":12,"user name":"Ivan","bdate":"12.3.1984"},
+                                     {"id":64,"user name":"Petrov","bdate":"25.9.1980"},
+                                     {"id":39,"user name":"Yakovleva","bdate":"14.6.1984"},
+                                     {"id":88,"user name":"Svetlova","bdate":"19.1.1980"},
+                                     {"id":103,"user name":"Mironov","bdate":"15.12.1980"},
+                                     {"id":503,"user name":"Voronova"},
+                                     {"id":9,"user name":"Sidorov","bdate":"3.5"},
+                                     {"id":395,"user name":"Danilova","bdate":"6.2.1978"},
+                                     {"id":1002,"user name":"Kuznetsov","bdate":"8.10.1978"},
+                                     {"id":932,"user name":"Denisova","bdate":"28.11"},]}}
+dict = {}
+a = r["response"]['items']
+
+
+#кортеж
+for i in range(0,len(a)):
+    for key, value in a[i].items():
+        if key == 'bdate':
+            if value.count('.') == 2:
+                key1 = 2018 - int(value[-4:])
+                if key1 in dict:
+                    dict[key1] += 1
+                else:
+                    dict[key1] = 1
+s = []
+for k in dict:
+    a = (k,dict[k])
+    s.append(a)
+s = sorted((s))
+print(s)
+print(s[0][1])
+
+#for m in range(0,len(s)):
 
 
 
+
+#кортеж
+
+
+
+print(dict)
+#print(tuple(sorted()))
+#print(r["response"]['items'])
 
 
 
