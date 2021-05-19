@@ -1,7 +1,7 @@
 import random
 
 
-stats = {'ходы': 0, 'металл': 3, 'алюминий': 4, 'фотоэлемент': 0, 'зонд': 0, 'жизнеобеспечение': 0, 'двигатель': 0, 'связь': 0, 'навигация': 0, 'ремонт': 0, 'броня': 0}
+stats = {'ходы': 0, 'металл': 3, 'алюминий': 4, 'фотоэлемент': 0, 'зонд': 0, 'жизнеобеспечение': 0, 'двигатель': 1, 'связь': 0, 'навигация': 0, 'ремонт': 0, 'броня': 0}
 def repair(stats):
     print('-'*176)
     print('Выберите одно из действий:\n1. Починить систему корабля \n2. Собрать зонд\n3. Выход')
@@ -122,6 +122,7 @@ def exchange(stats):
 
 
 
+
 '''
 n = int(input())
 dict = {}
@@ -139,7 +140,17 @@ if s in dict.values():
             print(k)'''
 
 
-
+def cold_freeze(stats):
+    #в итоге всегда ломается двигатель
+    if stats['двигатель'] == 1:
+        dict = {1:'Сломалась система охлождения двигателя',2:'Превышение нормы давления в двигателе',3:'Корабль попал в магнитную бурю',4:'Высокие нагрузки на двигатель'}
+        r = random.randint(1,4)
+        print(dict[r], '- работа двигателя в критичском состоянии.')
+        stats['двигатель'] = 0
+        return stats
+    else:
+        return stats
+cold_freeze(stats)
 #кр 180521
 
 import json
@@ -151,17 +162,16 @@ loaded_r = json.loads(r)
 loaded_r['rating'] #Output 3.5
 type(r) #Output str
 type(loaded_r) #Output dict
-'''
+
 #1
 #{"dog":1,"cat":2}
-'''
+
 r = json.loads(input())
 wrd = input()
 print(r[wrd])
-'''
 
 #2
-'''
+
 r = json.loads(input())
 #r = ([{"key1":[0,4,1],"key2":[3,-8,14,5]},{"key1":[1,7],"key2":[9,-13]},{"key2":[1,-1,1],"key3":[3]}])
 dict = {}
@@ -173,58 +183,42 @@ for i in range(0,len(r)):
         else:
             dict[key] = int(sum(value))
 print(json.dumps(dict))
+
+
+
 # конвертируем в JSON:
 # в результате получаем строк JSON:
-'''
+
 #3
-
-r = {"response":{"count":10,"items":[{"id":12,"user name":"Ivan","bdate":"12.3.1984"},
-                                     {"id":64,"user name":"Petrov","bdate":"25.9.1980"},
-                                     {"id":39,"user name":"Yakovleva","bdate":"14.6.1984"},
-                                     {"id":88,"user name":"Svetlova","bdate":"19.1.1980"},
-                                     {"id":103,"user name":"Mironov","bdate":"15.12.1980"},
-                                     {"id":503,"user name":"Voronova"},
-                                     {"id":9,"user name":"Sidorov","bdate":"3.5"},
-                                     {"id":395,"user name":"Danilova","bdate":"6.2.1978"},
-                                     {"id":1002,"user name":"Kuznetsov","bdate":"8.10.1978"},
-                                     {"id":932,"user name":"Denisova","bdate":"28.11"},]}}
+r = {"response":{"count":10,"items":[{"id":12,"user name":"Ivan","bdate":"12.3.1984"},{"id":64,"user name":"Petrov","bdate":"25.9.1980"},{"id":39,"user name":"Yakovleva","bdate":"14.6.1984"},{"id":88,"user name":"Svetlova","bdate":"19.1.1980"},{"id":103,"user name":"Mironov","bdate":"15.12.1980"},{"id":503,"user name":"Voronova"},{"id":9,"user name":"Sidorov","bdate":"3.5"},{"id":395,"user name":"Danilova","bdate":"6.2.1978"},{"id":1002,"user name":"Kuznetsov","bdate":"8.10.1978"},{"id":932,"user name":"Denisova","bdate":"28.11"}]}}
 dict = {}
+r = json.loads(input())
 a = r["response"]['items']
-
-
 #кортеж
 for i in range(0,len(a)):
     for key, value in a[i].items():
+
+        #day,month,year = value.split('.')
+        #print(day)
         if key == 'bdate':
-            if value.count('.') == 2:
+            day = value[:value.find('.')]
+            month = value[value.find('.')+1:value.rfind('.')]
+            year = value[value.rfind('.')+1:]
+            #if value.count('.') == 2:
+            if day != '' and month != '' and len(year) == 4:
                 key1 = 2018 - int(value[-4:])
                 if key1 in dict:
                     dict[key1] += 1
                 else:
                     dict[key1] = 1
+
 s = []
 for k in dict:
     a = (k,dict[k])
     s.append(a)
-s = sorted((s))
-print(s)
-print(s[0][1])
-
-#for m in range(0,len(s)):
-
-
-
-
-#кортеж
-
-
-
-print(dict)
-#print(tuple(sorted()))
-#print(r["response"]['items'])
-
-
-
-
-
+print(sorted(s, key=lambda point: (-point[1],point[0])))
+print(new_s)
+coord = [(3, 11, 14), (3, 9, 18), (3, 10, 10), (3, 11, 12), (3, 11, 10), (3, 10, 12), (3, 9, 14)]
+print(sorted(coord, key=lambda point: (point[1], -point[2])))
+'''
 
