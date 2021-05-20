@@ -316,7 +316,7 @@ def pirate(stats):
             print('-',grab['met' + str(met)],end='')
         elif stats['фотоэлемент'] - pht >= 0 and pht > 0:
             stats['фотоэлемент'] -= pht
-            print('-',grab['pht' + str(pht)],end='')
+            print('-',grab['pht' + str(pht)],end='\n')
     else:
         print('У вас нет ресурсов и пираты подарили вам 1 металл и 1 алюминия')
         stats['металл'] += met
