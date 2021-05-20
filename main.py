@@ -5,11 +5,16 @@ import string
 def main():
     stats = {'ходы': 20, 'металл': 1, 'алюминий': 1, 'фотоэлемент': 0, 'зонд': 5, 'жизнеобеспечение': 0, 'двигатель': 0,
              'связь': 0, 'навигация': 0, 'ремонт': 0, 'корпус': 0}
-
-    # тут предисловие
+    stats_dop = {'жизнеобеспечение': 0, 'двигатель': 0, 'связь': 0, 'навигация': 0, 'ремонт': 0, 'корпус': 0}
     # правила
+    # тут предисловие
     # совет: первым делом жизнеобеспечение
-
+    stability_1 = choice(list(stats_dop.keys()))
+    stats_dop.pop(stability_1)
+    stability_2 = choice(list(stats_dop.keys()))
+    stats[stability_1] = 1
+    stats[stability_2] = 1
+    print(stability_1,stability_2)
     statistics(stats)
     input()
     turn(stats)
@@ -41,9 +46,9 @@ def statistics(stats):
     print('|{:<119}|'.format(' Ремонтный отсек: ' + state[4]))
     print('|{:<119}|'.format(' Корпус: ' + state[5]))
     print('+{:-^119}+'.format(''))
-stats = {'ходы': 20, 'металл': 1, 'алюминий': 1, 'фотоэлемент': 0, 'зонд': 5, 'жизнеобеспечение': 0, 'двигатель': 0,
+'''stats = {'ходы': 20, 'металл': 1, 'алюминий': 1, 'фотоэлемент': 0, 'зонд': 5, 'жизнеобеспечение': 0, 'двигатель': 0,
              'связь': 0, 'навигация': 0, 'ремонт': 0, 'корпус': 0}
-statistics(stats)
+statistics(stats)'''
 def turn(stats):
     events = {0: planet,
               1: planet,
@@ -383,6 +388,7 @@ def cold_freeze(stats):
     else:
         return stats
 
+main()
 
 #кр 180521
 
