@@ -1,7 +1,7 @@
 import random
+import string
 
-
-stats = {'ходы': 0, 'металл': 3, 'алюминий': 4, 'фотоэлемент': 0, 'зонд': 0, 'жизнеобеспечение': 0, 'двигатель': 1, 'связь': 0, 'навигация': 0, 'ремонт': 0, 'броня': 0}
+stats = {'ходы': 0, 'металл': 3, 'алюминий': 4, 'фотоэлемент': 0, 'зонд': 1, 'жизнеобеспечение': 0, 'двигатель': 1, 'связь': 0, 'навигация': 1, 'ремонт': 0, 'броня': 0}
 def repair(stats):
     print('-'*176)
     print('Выберите одно из действий:\n1. Починить систему корабля \n2. Собрать зонд\n3. Выход')
@@ -123,21 +123,6 @@ def exchange(stats):
 
 
 
-'''
-n = int(input())
-dict = {}
-for i in range(0,n):
-    a = list(input().split())
-    key = a[0]
-    v = a[1:]
-    dict[key] = v
-s = input()
-print(dict)
-if s in dict.values():
-    print(1)
-    for k, v in dict.items():
-        if v == s:
-            print(k)'''
 
 
 def cold_freeze(stats):
@@ -150,7 +135,85 @@ def cold_freeze(stats):
         return stats
     else:
         return stats
-cold_freeze(stats)
+
+def prode(stats):
+    '''
+    функция- запуск зонда
+    :param stats:
+    :return:
+    '''
+    if stats['зонд'] > 0:
+        stats['зонд'] -= 1
+        t=random.randint(0,1)
+        print(t)
+        if t==1:
+            stats['алюминий'] += random.randint(0, 3)
+            stats['фотоэлемент'] += random.randint(0, 3)
+            stats['металл'] += random.randint(1, 3)
+        else:
+            t=int(input('''Произошла неудача, зонд потерян. Вы можете:
+            1.Отправить ещё один.
+            2.Перейти к следующему ходу'''))
+            if t==1:
+                prode(stats)
+    else:
+        print('У вас недостаточно зондов')
+    return stats
+
+def name():
+    '''
+     генерирует рандомное имя
+    :return:
+    '''
+    letters = string.ascii_lowercase
+    rand_string = ''.join(random.sample(letters, 3))
+    return 'NSU'+rand_string
+
+def landing(stats):
+    '''
+    приземление
+    :param stats:
+    :return:
+    '''
+    if stats['двигатель']==0:
+        print('Отсек двигатель неисправен')
+    else:
+        t=random.randint(0,2)
+        if stats['навигация']==0:
+            if stats['броня']==0:
+                stats['двигатель']=0
+            else:
+                stats['броня']=0
+
+        if t==0:
+            print('На планете пусто')
+        else:
+            stats['алюминий'] += random.randint(0, 3)
+            stats['фотоэлемент'] += random.randint(0, 3)
+            stats['металл'] += random.randint(1, 3)
+
+def planet(stats):
+    '''
+    выбор что сделать с планетой
+    :param stats:
+    :return:
+    '''
+    planet_name=name()
+    print('В этой системе найден объект',planet_name)
+    r=int(input('''Вы можете:
+     1.Отправить зонт
+     2.Высадиться на планету самостоятельно 
+     3.Перейти к следующему ходу'''))
+    if r==1:
+        prode(stats)
+    elif r==2:
+        landing(stats)
+    else:
+        print(99)
+
+planet(stats)
+
+
 #кр 180521
 
 import json
