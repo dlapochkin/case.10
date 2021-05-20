@@ -1,8 +1,9 @@
 from random import *
+import string
 
 
 def main():
-    stats = {'ходы': 20, 'металл': 1, 'алюминий': 1, 'фотоэлемент': 0, 'зонд': 0, 'жизнеобеспечение': 0, 'двигатель': 0,
+    stats = {'ходы': 20, 'металл': 1, 'алюминий': 1, 'фотоэлемент': 0, 'зонд': 5, 'жизнеобеспечение': 0, 'двигатель': 0,
              'связь': 0, 'навигация': 0, 'ремонт': 0, 'корпус': 0}
     # тут предисловие
     # правила
@@ -40,12 +41,18 @@ def statistics(stats):
 
 
 def turn(stats):
-    events = {0: meteorite_collision,
-              1: space_debris,
-              2: electromagnetic_radiation,
-              3: water,
-              4: cellular_system,
-              5: help}
+    events = {0: planet,
+              1: planet,
+              2: meteorite_collision,
+              3: space_debris,
+              4: electromagnetic_radiation,
+              5: water,
+              6: cellular_system,
+              7: help,
+              8: cellular_system,
+              9: pirate,
+              10: exchange,
+              11: cold_freeze}
     stats = events[randint(0, len(events) - 1)](stats)
     if stats['жизнеобеспечение']:
         stats['ходы'] -= 1
@@ -196,7 +203,7 @@ def water(stats):
 
 def cellular_system(stats):
     print('Помехи, создаваемые сломанной системой связи, привлекли лишнее внимание.', end='')
-    return 'pirate(stats)'
+    return pirate(stats)
 
 
 def help(stats):
@@ -212,5 +219,153 @@ def help(stats):
     stats['ходы'] += 2
     return stats
 
+
+def prode(stats):
+    '''
+    функция- запуск зонда
+    :param stats:
+    :return:
+    '''
+    if stats['зонд'] > 0:
+        stats['зонд'] -= 1
+        t=randint(0,1)
+        print('fsfgfdhhsdfshfd')
+        if t==1:
+            stats['алюминий'] += randint(0, 3)
+            stats['фотоэлемент'] += randint(0, 3)
+            stats['металл'] += randint(1, 3)
+        else:
+            t=int(input('''Произошла неудача, зонд потерян. Вы можете:
+            1.Отправить ещё один.
+            2.Перейти к следующему ходу'''))
+            if t==1:
+                prode(stats)
+    else:
+        print('У вас недостаточно зондов')
+    return stats
+
+
+def name():
+    '''
+     генерирует рандомное имя
+    :return:
+    '''
+    letters = string.ascii_lowercase
+    rand_string = ''.join(sample(letters, 3))
+    return 'NSU'+rand_string
+
+
+def landing(stats):
+    '''
+    приземление
+    :param stats:
+    :return:
+    '''
+    if stats['двигатель']==0:
+        print('Отсек двигатель неисправен')
+    else:
+        t=randint(0,2)
+        if stats['навигация']==0:
+            if stats['корпус']==0:
+                stats['двигатель']=0
+            else:
+                stats['корпус']=0
+
+        if t==0:
+            print('На планете пусто')
+        else:
+            stats['алюминий'] += randint(0, 3)
+            stats['фотоэлемент'] += randint(0, 3)
+            stats['металл'] += randint(1, 3)
+    return stats
+
+
+def planet(stats):
+    '''
+    выбор что сделать с планетой
+    :param stats:
+    :return:
+    '''
+    planet_name=name()
+    print('В этой системе найден объект',planet_name)
+    r=int(input('''Вы можете:
+     1.Отправить зонт
+     2.Высадиться на планету самостоятельно 
+     3.Перейти к следующему ходу'''))
+    if r==1:
+        prode(stats)
+    elif r==2:
+        landing(stats)
+    else:
+        dial(stats)
+    return stats
+
+
+def pirate(stats):
+    al = randint(0,2)
+    met = randint(2,3)
+    pht = randint(0,1)
+    grab = {'al0':'','al1':' 1 алюминий','al2':'2 алюминия','met2': '2 металла','met3': '3 металла', 'pht0': '', 'pht1': '1 фотоэлемент'}
+    print('На вас напали космические пираты.\nПосле нападения у вас украли:',grab['al'+ str(al)],grab['met'+ str(met)],grab['pht'+ str(pht)])
+    stats['алюминий'] -= al
+    stats['металл'] -= met
+    stats['фотоэлемент'] -= pht
+    return stats
+
+
+def exchange(stats):
+    print('Вы встретили торговца.Хотите с ним обменяться ресурсами?\n1. Да.\n2. Нет и выйти.')
+    r = randint(1,2)
+    #0 - алюминий за металл, 1 - металл за алюминий
+    choice = {1: 'Обмен: 1 алюминий за 2 металла', 2:'Обмен: 1 металл за 1 алюминий'}
+    invent = {1:'алюминия',2:'металла'}
+    a = int(input('Введите значение:\n'))
+    if a == 1:
+        print(choice[r],'Хотите обменяться?','1. Обменяться.\n2. Нет и выйти.',sep='\n')
+        b = int(input('Введите значение:\n'))
+        if b == 1:
+            if r == 1:
+                allow = stats['металл'] // 2
+                print('Введите количество алюминия. Доступно:',allow)
+                n = int(input())
+                if n <= allow:
+                    stats['металл'] -= 2 * n
+                    stats['алюминий'] += n
+                    print('Инвентарь: алюминий',stats['алюминий'],'металл',stats['металл'])
+                else:
+                    print('Недостаточно средств. Попробуйте еще раз.')
+                    return exchange(stats)
+            else:
+                print('Введите количество металла. Доступно:', stats['алюминий'])
+                n = int(input())
+                if n <= stats['алюминий']:
+                    stats['металл'] += n
+                    stats['алюминий'] -= n
+                    print('Инвентарь: алюминий', stats['алюминий'], 'металл', stats['металл'])
+                else:
+                    print('Недостаточно средств. Попробуйте еще раз.')
+                    return exchange(stats)
+        elif b == 2:
+            return stats
+        else:
+            print('Неверно введено значение. Попробуйте заново.')
+            return exchange(stats)
+    elif a == 2:
+        return stats
+    else:
+        print('Неверно введено значение. Попробуйте заново.')
+        return exchange(stats)
+
+
+def cold_freeze(stats):
+    #в итоге всегда ломается двигатель
+    if stats['двигатель'] == 1:
+        dict = {1:'Сломалась система охлождения двигателя',2:'Превышение нормы давления в двигателе',3:'Корабль попал в магнитную бурю',4:'Высокие нагрузки на двигатель'}
+        r = randint(1,4)
+        print(dict[r], '- работа двигателя в критичском состоянии.')
+        stats['двигатель'] = 0
+        return stats
+    else:
+        return stats
 
 main()
