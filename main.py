@@ -310,10 +310,10 @@ def pirate(stats):
         print('На вас напали космические пираты. После нападения у вас украли:')
         if stats['алюминий'] - al >= 0 and al > 0:
             stats['алюминий'] -= al
-            print('-',grab['al' + str(al)],end='')
+            print('-',grab['al' + str(al)],end='\n')
         elif stats['металл'] - met >= 0 and met > 0:
             stats['металл'] -= met
-            print('-',grab['met' + str(met)],end='')
+            print('-',grab['met' + str(met)],end='\n')
         elif stats['фотоэлемент'] - pht >= 0 and pht > 0:
             stats['фотоэлемент'] -= pht
             print('-',grab['pht' + str(pht)],end='\n')
