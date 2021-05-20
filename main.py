@@ -307,9 +307,16 @@ def pirate(stats):
     pht = randint(0,1)
     grab = {'al0':'','al1':' 1 алюминий','al2':'2 алюминия','met2': '2 металла','met3': '3 металла', 'pht0': '', 'pht1': '1 фотоэлемент'}
     print('На вас напали космические пираты.\nПосле нападения у вас украли:',grab['al'+ str(al)],grab['met'+ str(met)],grab['pht'+ str(pht)])
-    stats['алюминий'] -= al
-    stats['металл'] -= met
-    stats['фотоэлемент'] -= pht
+    if stats['алюминий'] - al >= 0:
+        stats['алюминий'] -= al
+    elif stats['металл'] - met >= 0:
+        stats['металл'] -= met
+    elif stats['фотоэлемент'] - pht >= 0:
+        stats['фотоэлемент'] -= pht
+    else:
+        print('У вас нет ресурсов и пираты подарили вам 1 металл и 1 алюминия')
+        stats['металл'] += met
+        stats['алюминий'] += al
     return stats
 
 
