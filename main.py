@@ -306,13 +306,17 @@ def pirate(stats):
     met = randint(2,3)
     pht = randint(0,1)
     grab = {'al0':'','al1':' 1 алюминий','al2':'2 алюминия','met2': '2 металла','met3': '3 металла', 'pht0': '', 'pht1': '1 фотоэлемент'}
-    print('На вас напали космические пираты.\nПосле нападения у вас украли:',grab['al'+ str(al)],grab['met'+ str(met)],grab['pht'+ str(pht)])
-    if stats['алюминий'] - al >= 0:
-        stats['алюминий'] -= al
-    elif stats['металл'] - met >= 0:
-        stats['металл'] -= met
-    elif stats['фотоэлемент'] - pht >= 0:
-        stats['фотоэлемент'] -= pht
+    if (stats['алюминий'] - al >= 0 and al > 0) or (stats['металл'] - met >= 0 and met > 0) or (stats['фотоэлемент'] - pht >= 0 and pht > 0):
+        print('На вас напали космические пираты. После нападения у вас украли:')
+        if stats['алюминий'] - al >= 0 and al > 0:
+            stats['алюминий'] -= al
+            print('-',grab['al' + str(al)],end='')
+        elif stats['металл'] - met >= 0 and met > 0:
+            stats['металл'] -= met
+            print('-',grab['met' + str(met)],end='')
+        elif stats['фотоэлемент'] - pht >= 0 and pht > 0:
+            stats['фотоэлемент'] -= pht
+            print('-',grab['pht' + str(pht)],end='')
     else:
         print('У вас нет ресурсов и пираты подарили вам 1 металл и 1 алюминия')
         stats['металл'] += met
@@ -374,5 +378,6 @@ def cold_freeze(stats):
         return stats
     else:
         return stats
-
-main()
+stats = {'ходы': 20, 'металл': 1, 'алюминий': 1, 'фотоэлемент': 0, 'зонд': 5, 'жизнеобеспечение': 0, 'двигатель': 0,
+             'связь': 0, 'навигация': 0, 'ремонт': 0, 'корпус': 0}
+pirate(stats)
