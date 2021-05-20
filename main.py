@@ -13,9 +13,9 @@ def prode(stats):
         t=randint(0,1)
         print(t)
         if t==1:
-            d['алюминий'] += randint(0, 3)
-            d['фотоэлемент'] += randint(0, 3)
-            d['металл'] += randint(1, 3)
+            stats['алюминий'] += randint(0, 3)
+            stats['фотоэлемент'] += randint(0, 3)
+            stats['металл'] += randint(1, 3)
         else:
             t=int(input('''Произошла неудача, зонд потерян. Вы можете:
             1.Отправить ещё один.
