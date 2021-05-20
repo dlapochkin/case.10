@@ -36,24 +36,27 @@ def name():
     return 'NSU'+rand_string
 
 def landing(stats):
-     '''
-      приземление
-     :param stats:
-     :return: 
-     '''
+    '''
+    приземление
+    :param stats:
+    :return:
+    '''
     if stats['двигатель']==0:
         print('Отсек двигатель неисправен')
     else:
         t=randint(0,2)
         if stats['навигация']==0:
             if stats['броня']==0:
-
+                stats['двигатель']=0
             else:
                 stats['броня']==0
 
         if t==0:
             print('На планете пусто')
         else:
+            stats['алюминий'] += randint(0, 3)
+            stats['фотоэлемент'] += randint(0, 3)
+            stats['металл'] += randint(1, 3)
 
 def planet(stats):
     '''
@@ -72,6 +75,7 @@ def planet(stats):
     elif r==2:
         landing(stats)
     else:
+        dial(stats)
 
 stats = {'ходы': 0, 'металл': 0, 'алюминий': 0, 'фотоэлемент': 0, 'зонд':5, 'жизнеобеспечение': 0, 'двигатель': 0, 'связь': 0, 'навигация': 0, 'ремонтный отсек': 0, 'броня': 0}
 
