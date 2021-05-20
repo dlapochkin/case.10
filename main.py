@@ -14,7 +14,6 @@ def main():
     stability_2 = choice(list(stats_dop.keys()))
     stats[stability_1] = 1
     stats[stability_2] = 1
-    print(stability_1, stability_2)
     statistics(stats)
     input()
     turn(stats)
