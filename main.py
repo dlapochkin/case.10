@@ -3,12 +3,10 @@ import string
 
 
 def main():
-    stats = {'ходы': 20, 'металл': 1, 'алюминий': 1, 'фотоэлемент': 0, 'зонд': 5, 'жизнеобеспечение': 0, 'двигатель': 0,
+    stats = {'ходы': 20, 'металл': 2, 'алюминий': 2, 'фотоэлемент': 2, 'зонд': 5, 'жизнеобеспечение': 0, 'двигатель': 0,
              'связь': 0, 'навигация': 0, 'ремонт': 0, 'корпус': 0}
     stats_dop = {'жизнеобеспечение': 0, 'двигатель': 0, 'связь': 0, 'навигация': 0, 'ремонт': 0, 'корпус': 0}
-    # правила
     # тут предисловие
-    # совет: первым делом жизнеобеспечение
     stability_1 = choice(list(stats_dop.keys()))
     stats_dop.pop(stability_1)
     stability_2 = choice(list(stats_dop.keys()))
@@ -55,10 +53,9 @@ def turn(stats):
               5: water,
               6: cellular_system,
               7: help,
-              8: cellular_system,
               9: pirate,
               10: exchange,
-              11: cold_freeze}
+              11: engine}
     stats = events[randint(0, len(events) - 1)](stats)
     if stats['жизнеобеспечение']:
         stats['ходы'] -= 1
@@ -98,35 +95,38 @@ def repair(stats):
         ship = ['жизнеобеспечение', 'двигатель', 'связь', 'навигация', 'ремонт', 'корпус']
         price = {'жизнеобеспечение': [1, 1, 1],
                  'двигатель': [3, 3, 0],
-                 'связь': [2, 0, 0],
+                 'связь': [0, 2, 0],
                  'навигация': [2, 2, 1],
-                 'ремонт': [3, 4, 0],
-                 'корпус': [0, 4, 0]}
+                 'ремонт': [4, 3, 0],
+                 'корпус': [4, 0, 0]}
         statistics(stats)
         print('+{:-^59s}+'.format('Стоимость ремонта систем'), '\n',
               '|{:^20s}|{:^12s}|{:^12s}|{:^12s}|'.format('Система', 'Металл', 'Алюминий', 'Фотоэлементы'), '\n', '+',
               '-' * 59, '+', sep='')
         i = 1
         for item in ship:
-            print('|{:20s}|{:^12d}|{:^12d}|{:^12d}|'.format(str(i) + '. ' + item.capitalize(), price[item][0], price[item][1],
+            print('|{:20s}|{:^12d}|{:^12d}|{:^12d}|'.format(str(i) + '. ' + item.capitalize(), price[item][0],
+                                                            price[item][1],
                                                             price[item][2]))
             i += 1
         print('-' * 61)
         n = input('Введите цифру системы, которую вы хотите отремонтировать, '
-                  'либо введите пустую строку для выхода из ремонтного отсека.')
+                  'либо введите пустую строку для выхода из ремонтного отсека.\n')
         if n == '':
             return repair(stats)
         n = int(n)
-        if stats.get(ship[n-1]) == 0:
-            if price.get(ship[n-1])[0] <= stats['алюминий'] and price.get(ship[n-1])[1] <= stats['металл'] and \
-                    price.get(ship[n-1])[2] <= stats['фотоэлемент']:
-                stats['алюминий'] -= price.get(ship[n-1])[0]
-                stats['металл'] -= price.get(ship[n-1])[1]
-                stats['фотоэлемент'] -= price.get(ship[n-1])[2]
-                stats[ship[n-1]] = 1
+        if stats.get(ship[n - 1]) == 0:
+            if price.get(ship[n - 1])[0] <= stats['металл'] and price.get(ship[n - 1])[1] <= stats['алюминий'] and \
+                    price.get(ship[n - 1])[2] <= stats['фотоэлемент']:
+                stats['металл'] -= price.get(ship[n - 1])[0]
+                stats['алюминий'] -= price.get(ship[n - 1])[1]
+                stats['фотоэлемент'] -= price.get(ship[n - 1])[2]
+                stats[ship[n - 1]] = 1
                 systems = {'жизнеобеспечение': 'систему жизнеобеспечения.', 'двигатель': 'двигательный отсек.',
-                           'связь': 'систему связи', 'навигация': 'систему навигации.', 'ремонт': 'ремонтный отсек.'}
-                print('Вы починили', systems[ship[n-1]])
+                           'связь': 'систему связи', 'навигация': 'систему навигации.', 'ремонт': 'ремонтный отсек.',
+                           'корпус': 'корпус.'}
+                print('Вы починили', systems[ship[n - 1]])
+                statistics(stats)
             else:
                 print('Недостаточно средств. Попробуйте еще раз.')
                 q = input('Введите любой символ для продолжения:\n')
@@ -137,25 +137,31 @@ def repair(stats):
         return stats
     elif a == '3':
         return stats
-    elif a == 2:
-        print('Стоимость сборки одного зонда:\nЗонд - 1 алюминий')
-        allow = stats.get('алюминий')
-        #цена 1 алюминий
-        print('Выберите количество зондов (Доступно:',allow,')')
-        n = int(input())
-        if n > allow:
-            print('Недостаточно средств. Попробуйте еще раз.')
-            q = input('Введите любой символ для продолжения:\n')
-            return repair(stats)
-        elif n <= allow:
-            stats['алюминий'] -= n
-            stats['зонд'] += n
-            #def statistics
-            print(stats)
-            q = input('Введите любой символ для продолжения:\n')
-        else:
-            print('Неверно введено значение. Попробуйте еще раз.')
+    elif a == '2':
+        return assembling(stats)
+
+
+def assembling(stats):
+    allow = min(stats.get('алюминий'), stats.get('металл'), stats.get('фотоэлемент'))
+    statistics(stats)
+    print('Стоимость сборки одного зонда составляет: 1 металл, 1 алюминий, 1 фотоэлемент. ')
+    if allow == 0:
+        im = input('Недостаточно ресурсов для сборки хотя бы одного дрона. Для выхода введите любой символ.\n')
         return repair(stats)
+    print('Введите количество собираемых зондов (доступно: ', allow, '). Для выхода введите пустую строку.', sep='')
+    n = int(input())
+    if n > allow:
+        print('Недостаточно ресурсов для сборки ', n, ' зондов.')
+        return assembling(stats)
+    elif n <= allow:
+        stats['алюминий'] -= n
+        stats['металл'] -= n
+        stats['фотоэлемент'] -= n
+        stats['зонд'] += n
+        return repair(stats)
+    print('Ошибка ввода. Попробуйте еще раз.')
+    return assembling(stats)
+
 
 def meteorite_collision(stats):
     enabled = []
@@ -202,25 +208,37 @@ def water(stats):
                  'для получения кислорода.',
               1: 'В атмосфере одной из планет системы найдены скопления водяного пара.'
                  'Собранный конденсат пригоден в пищу или для получения кислорода.',
-              2: 'Одна из планет системы на '+str(randint(20, 70))+'% состоит изо льда. Растопив его, вы '
-                                                                               'вполне можете применить его в пищу или '
-                                                                               'для получения кислорода.'}
+              2: 'Одна из планет системы на ' + str(randint(20, 70)) + '% состоит изо льда. Растопив его, вы '
+                                                                       'вполне можете применить его в пищу или '
+                                                                       'для получения кислорода.'}
     print(script[randint(0, 2)], 'Количество ходов увеличено на два.')
     stats['ходы'] += 2
     return stats
 
 
 def cellular_system(stats):
-    print('Помехи, создаваемые сломанной системой связи, привлекли лишнее внимание.', end='')
-    return pirate(stats)
+    if stats['связь'] == 0:
+        print('Помехи, создаваемые сломанной системой связи, привлекли лишнее внимание.')
+        return pirate(stats)
+    resources = {'m1': '1 металл', 'm2': '2 металла', 'al0': '', 'al1': ', 1 алюминий', 'cell0': '',
+                 'cell1': ', 1 фотоэлемент'}
+    m = randint(1, 2)
+    al = randint(0, 1)
+    cell = randint(0, 1)
+    print('Система связи корабля получила сигнал от вышедшего из строя искусственного спутника. Разобрав его, вы '
+          'получили ', resources['m' + str(m)], resources['al' + str(al)], resources['cell' + str(cell)], '.', sep='')
+    stats['металл'] += m
+    stats['алюминий'] += al
+    stats['фотоэлемент'] += cell
+    return stats
 
 
 def help(stats):
     resources = {'cell1': 'Получен 1 фотоэлемент', 'cell2': 'Получено 2 фотоэлемента', 'al0': '',
                  'al1': ', 1 алюминий', 'm0': '', 'm1': ', 1 металл', 'm2': ', 2 металла'}
     cell, al, m = randint(1, 2), randint(0, 1), randint(0, 2)
-    print('На одной из планет системы вы встретили дружелюбное население, расположенное к контакту и готовое оказазать '
-          'вам помощь. ', resources['cell' + str(cell)], resources['al'+str(al)], resources['m'+str(m)], '.\n',
+    print('На планете ', str(name()), ' вы встретили расположенное к контакту поселение. ',
+          resources['cell' + str(cell)], resources['al' + str(al)], resources['m' + str(m)], '.\n',
           'Полученная провизия увеличивает ваши запасы и дает 2 дополнительных хода.', sep='')
     stats['металл'] += m
     stats['алюминий'] += al
@@ -230,57 +248,51 @@ def help(stats):
 
 
 def prode(stats):
-    '''
-    функция- запуск зонда
-    :param stats:
-    :return:
-    '''
     if stats['зонд'] > 0:
         stats['зонд'] -= 1
-        t=randint(0,1)
-        print('fsfgfdhhsdfshfd')
-        if t==1:
-            stats['алюминий'] += randint(0, 3)
-            stats['фотоэлемент'] += randint(0, 3)
-            stats['металл'] += randint(1, 3)
+        t = randint(0, 2)
+        if t == 0:
+            t = input('''Произошла неудача, зонд потерян. Введите "1" для отправки еще одного зонда, либо любой 
+            другой символ для выхода.''')
+            if t == '1':
+                return prode(stats)
+            else:
+                return planet_dial(stats)
         else:
-            t=int(input('''Произошла неудача, зонд потерян. Вы можете:
-            1.Отправить ещё один.
-            2.Перейти к следующему ходу'''))
-            if t==1:
-                prode(stats)
+            res = {'m1': '1 металл', 'm2': '2 металла', 'm3': '3 металла', 'al0': '', 'al1': ', 1 алюминий',
+                         'al2': ', 2 алюминия', 'al3': ', 3 алюминия', 'cell0': '', 'cell1': ', 1 фотоэлемент',
+                         'cell2': ', 2 фотоэлемента', 'cell3': ', 3 фотоэлемента'}
+            m = randint(1, 3)
+            al = randint(0, 3)
+            cell = randint(0, 3)
+            print('Вернувшийся из экспедиции зонд принес вам ', res['m'+str(m)], res['al'+str(al)],
+                  res['cell'+str(cell)], '.', sep='')
+            stats['алюминий'] += al
+            stats['фотоэлемент'] += cell
+            stats['металл'] += m
     else:
-        print('У вас недостаточно зондов')
+        print('У вас недостаточно зондов для запуска. Рекомендуется посетить ремонтный отсек.')
     return stats
 
 
 def name():
-    '''
-     генерирует рандомное имя
-    :return:
-    '''
-    letters = string.ascii_lowercase
+    letters = string.ascii_uppercase
     rand_string = ''.join(sample(letters, 3))
-    return 'NSU'+rand_string
+    return 'NSU' + rand_string
 
 
 def landing(stats):
-    '''
-    приземление
-    :param stats:
-    :return:
-    '''
-    if stats['двигатель']==0:
+    if stats['двигатель'] == 0:
         print('Отсек двигатель неисправен')
     else:
-        t=randint(0,2)
-        if stats['навигация']==0:
-            if stats['корпус']==0:
-                stats['двигатель']=0
+        t = randint(0, 2)
+        if stats['навигация'] == 0:
+            if stats['корпус'] == 0:
+                stats['двигатель'] = 0
             else:
-                stats['корпус']=0
+                stats['корпус'] = 0
 
-        if t==0:
+        if t == 0:
             print('На планете пусто')
         else:
             stats['алюминий'] += randint(0, 3)
@@ -290,44 +302,52 @@ def landing(stats):
 
 
 def planet(stats):
-    '''
-    выбор что сделать с планетой
-    :param stats:
-    :return:
-    '''
-    planet_name=name()
-    print('В этой системе найден объект',planet_name)
-    r=int(input('''Вы можете:
-     1.Отправить зонт
-     2.Высадиться на планету самостоятельно 
-     3.Перейти к следующему ходу'''))
-    if r==1:
-        prode(stats)
-    elif r==2:
-        landing(stats)
+    object = {0: 'обнаружена планета ', 1: 'обнаружена карликовая планета ',
+              2: 'обнаружен спутник '+str(name())+' планеты '}
+    sc = randint(0, 2)
+    planet_name = name()
+    im_stats = stats.copy()
+    im_stats['ходы'] -= 1
+    statistics(im_stats)
+    print('В этой системе ', object[sc], planet_name, ', ', sep='', end='')
+    if sc == 2:
+        print('на котором могут быть найдены ценные ресурсы.\n')
     else:
-        dial(stats)
+        print('на которой могут быть найдены ценные ресурсы.\n')
+    return planet_dial(stats)
+
+
+def planet_dial(stats):
+    r = int(input('''Выберите действие, либо введите любой другой символ для выхода.
+        1. Отправить зонд
+        2. Высадиться на планету (не безопасно)'''))
+    if r == 1:
+        prode(stats)
+    elif r == 2:
+        landing(stats)
     return stats
 
 
 def pirate(stats):
-    al = randint(0,2)
-    met = randint(2,3)
-    pht = randint(0,1)
-    grab = {'al0':'','al1':' 1 алюминий','al2':'2 алюминия','met2': '2 металла','met3': '3 металла', 'pht0': '', 'pht1': '1 фотоэлемент'}
-    if (stats['алюминий'] - al >= 0 and al > 0) or (stats['металл'] - met >= 0 and met > 0) or (stats['фотоэлемент'] - pht >= 0 and pht > 0):
+    al = randint(0, 2)
+    met = randint(2, 3)
+    pht = randint(0, 1)
+    grab = {'al0': '', 'al1': ' 1 алюминий', 'al2': '2 алюминия', 'met2': '2 металла', 'met3': '3 металла', 'pht0': '',
+            'pht1': '1 фотоэлемент'}
+    if (stats['алюминий'] - al >= 0 and al > 0) or (stats['металл'] - met >= 0 and met > 0) or \
+            (stats['фотоэлемент'] - pht >= 0 and pht > 0):
         print('На вас напали космические пираты. После нападения у вас украли:')
         if stats['алюминий'] - al >= 0 and al > 0:
             stats['алюминий'] -= al
-            print('-',grab['al' + str(al)],end='\n')
+            print(grab['al' + str(al)])
         elif stats['металл'] - met >= 0 and met > 0:
             stats['металл'] -= met
-            print('-',grab['met' + str(met)],end='\n')
+            print(grab['met' + str(met)])
         elif stats['фотоэлемент'] - pht >= 0 and pht > 0:
             stats['фотоэлемент'] -= pht
-            print('-',grab['pht' + str(pht)],end='\n')
+            print(grab['pht' + str(pht)])
     else:
-        print('У вас нет ресурсов и пираты подарили вам 1 металл и 1 алюминия')
+        print('У вас нечего грабить. Пираты сжалились над вами и отдали вам 1 металл и 1 алюминий')
         stats['металл'] += met
         stats['алюминий'] += al
     return stats
@@ -335,23 +355,23 @@ def pirate(stats):
 
 def exchange(stats):
     print('Вы встретили торговца.Хотите с ним обменяться ресурсами?\n1. Да.\n2. Нет и выйти.')
-    r = randint(1,2)
-    #0 - алюминий за металл, 1 - металл за алюминий
-    choice = {1: 'Обмен: 1 алюминий за 2 металла', 2:'Обмен: 1 металл за 1 алюминий'}
-    invent = {1:'алюминия',2:'металла'}
+    r = randint(1, 2)
+    # 0 - алюминий за металл, 1 - металл за алюминий
+    choice = {1: 'Обмен: 1 алюминий за 2 металла', 2: 'Обмен: 1 металл за 1 алюминий'}
+    invent = {1: 'алюминия', 2: 'металла'}
     a = int(input('Введите значение:\n'))
     if a == 1:
-        print(choice[r],'Хотите обменяться?','1. Обменяться.\n2. Нет и выйти.',sep='\n')
+        print(choice[r], 'Хотите обменяться?', '1. Обменяться.\n2. Нет и выйти.', sep='\n')
         b = int(input('Введите значение:\n'))
         if b == 1:
             if r == 1:
                 allow = stats['металл'] // 2
-                print('Введите количество алюминия. Доступно:',allow)
+                print('Введите количество алюминия. Доступно:', allow)
                 n = int(input())
                 if n <= allow:
                     stats['металл'] -= 2 * n
                     stats['алюминий'] += n
-                    print('Инвентарь: алюминий',stats['алюминий'],'металл',stats['металл'])
+                    print('Инвентарь: алюминий', stats['алюминий'], 'металл', stats['металл'])
                 else:
                     print('Недостаточно средств. Попробуйте еще раз.')
                     return exchange(stats)
@@ -377,15 +397,16 @@ def exchange(stats):
         return exchange(stats)
 
 
-def cold_freeze(stats):
-    #в итоге всегда ломается двигатель
+def engine(stats):
     if stats['двигатель'] == 1:
-        dict = {1:'Сломалась система охлождения двигателя',2:'Превышение нормы давления в двигателе',3:'Корабль попал в магнитную бурю',4:'Высокие нагрузки на двигатель'}
-        r = randint(1,4)
-        print(dict[r], '- работа двигателя в критичском состоянии.')
+        scripts = {1: 'Сломалась система охлаждения двигателя.', 2: 'Превышение нормы давления в двигателе.',
+                   3: 'Корабль попал в магнитную бурю.', 4: 'Высокие нагрузки вывели двигатель из строя.'}
+        print(scripts[randint(1, 4)], 'Двигательный отсек в критическом состоянии.')
         stats['двигатель'] = 0
         return stats
-    else:
-        return stats
+    print('Критическое состояние двигателя привело к его полному отказу. На перезапуск потрачен дополнительный ход.')
+    stats['ход'] -= 1
+    return stats
+
 
 main()
