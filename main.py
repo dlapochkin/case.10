@@ -1,6 +1,6 @@
 from random import *
-import string
 
+'''
 
 def main():
     stats = {'ходы': 20, 'металл': 5, 'алюминий': 5, 'фотоэлемент': 5, 'зонд': 5, 'жизнеобеспечение': 0, 'двигатель': 0,
@@ -82,7 +82,7 @@ def dial(stats):
         print('Повреждена система жизнеобеспечения, количество доступных ходов сокращается в два раза быстрее.')
     if stats['ходы'] < 5:
         print('Ресурсы системы жизнеобеспечения на исходе.')
-    i = input('''1. Следующий ход\n2. Ремонтный отсек\n''')
+    i = input('1. Следующий ход\n2. Ремонтный отсек\n')
     if i == '1':
         return stats
     elif i == '2':
@@ -228,11 +228,6 @@ def help(stats):
 
 
 def prode(stats):
-    '''
-    функция- запуск зонда
-    :param stats:
-    :return:
-    '''
     if stats['зонд'] > 0:
         stats['зонд'] -= 1
         t=randint(0,1)
@@ -263,11 +258,6 @@ def name():
 
 
 def landing(stats):
-    '''
-    приземление
-    :param stats:
-    :return:
-    '''
     if stats['двигатель']==0:
         print('Отсек двигатель неисправен')
     else:
@@ -288,11 +278,8 @@ def landing(stats):
 
 
 def planet(stats):
-    '''
-    выбор что сделать с планетой
-    :param stats:
-    :return:
-    '''
+
+
     planet_name=name()
     print('В этой системе найден объект',planet_name)
     r=int(input('''Вы можете:
@@ -394,7 +381,7 @@ main()
 
 import json
 #example
-'''
+
 r = {'is_claimed': 3, 'rating': 3.5}
 r = json.dumps(r)
 loaded_r = json.loads(r)
@@ -461,3 +448,11 @@ coord = [(3, 11, 14), (3, 9, 18), (3, 10, 10), (3, 11, 12), (3, 11, 10), (3, 10,
 print(sorted(coord, key=lambda point: (point[1], -point[2])))
 '''
 
+
+#n = int(input())
+#for i in range(0,n):
+d = {}
+d.setdefault(1, []).append(2)
+d.setdefault(1, []).append(3)
+d.setdefault(5, []).append(6)
+print(d)
