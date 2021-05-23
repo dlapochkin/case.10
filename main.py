@@ -1,3 +1,11 @@
+"""
+Case-study 10
+Developers:
+Кривошапова Д. Е.:
+Кузнецов А. Д.:
+Лапочкин Д. А.: 50%
+"""
+
 from random import *
 import string
 
