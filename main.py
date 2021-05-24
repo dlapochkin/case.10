@@ -505,6 +505,11 @@ def pirate(stats):
 
 
 def exchange(stats):
+    """
+    Reflects the impact of a changing operation
+    :param stats: current state of the system
+    :return: new state of the system
+    """
     print('На планете', name(), 'вы встретили торговца. Для начала обмена введите "1", либо любой другой символ для '
                                 'выхода.')
     r = randint(1, 2)
@@ -523,6 +528,7 @@ def exchange(stats):
                     stats['металл'] -= 2 * n
                     stats['алюминий'] += n
                     print('Инвентарь: алюминий', stats['алюминий'], 'металл', stats['металл'])
+                    return stats
                 else:
                     print('Недостаточно средств. Попробуйте еще раз.')
                     return exchange(stats)
@@ -533,6 +539,7 @@ def exchange(stats):
                     stats['металл'] += n
                     stats['алюминий'] -= n
                     print('Инвентарь: алюминий', stats['алюминий'], 'металл', stats['металл'])
+                    return stats
                 else:
                     print('Недостаточно средств. Попробуйте еще раз.')
                     return exchange(stats)
@@ -546,6 +553,11 @@ def exchange(stats):
 
 
 def engine(stats):
+    """
+    Brakes the engine
+    :param stats: current state of the system
+    :return: new state of the system
+    """
     if stats['двигатель'] == 1:
         scripts = {1: 'Сломалась система охлаждения двигателя.', 2: 'Превышение нормы давления в двигателе.',
                    3: 'Корабль попал в магнитную бурю.', 4: 'Высокие нагрузки вывели двигатель из строя.'}
