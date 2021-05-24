@@ -1,16 +1,21 @@
 """
 Case-study 10
 Developers:
-Кривошапова Д. Е.:
+Кривошапова Д. Е.:40%
 Кузнецов А. Д.: 40%
 Лапочкин Д. А.: 50%
 """
+
 
 from random import *
 import string
 
 
 def main():
+    """
+    Start of the game
+    :return: None
+    """
     stats = {'ходы': 20, 'металл': 2, 'алюминий': 1, 'фотоэлемент': 1, 'зонд': 3, 'жизнеобеспечение': 0, 'двигатель': 0,
              'связь': 0, 'навигация': 0, 'ремонт': 0, 'корпус': 0}
     stats_dop = {'жизнеобеспечение': 0, 'двигатель': 0, 'связь': 0, 'навигация': 0, 'ремонт': 0}
@@ -40,6 +45,11 @@ def main():
 
 
 def statistics(stats):
+    """
+    Prints the table with current state of the system
+    :param stats: current state of the system elements
+    :return: None
+    """
     if stats['ходы'] < 0:
         stats['ходы'] = 0
     print('+{:-^79s}+{:19s}+{:-^19s}+'.format('Склад', '', 'Жизнеобеспечение'))
@@ -67,6 +77,11 @@ def statistics(stats):
 
 
 def turn(stats):
+    """
+    Determines the end of the game
+    :param stats: current state of the system elements
+    :return: None
+    """
     events = {0: planet,
               1: planet,
               2: meteorite_collision,
@@ -98,6 +113,11 @@ def turn(stats):
 
 
 def dial(stats):
+    """
+    Warns of an imminent end of the game
+    :param stats: current state of system elements
+    :return: new state of system elements
+    """
     if not stats['жизнеобеспечение']:
         print('Повреждена система жизнеобеспечения, количество доступных ходов сокращается в два раза быстрее.')
     if stats['ходы'] < 5:
@@ -114,6 +134,11 @@ def dial(stats):
 
 
 def repair(stats):
+    """
+    Fixes the element of the system
+    :param stats: current state of the system elements
+    :return: new state of the system elements
+    """
     a = input('Выберите одно из действий, либо введите любой другой символ для выхода:\n1. Починить систему корабля'
               '\n2. Собрать зонд\n')
     if a == '1':
@@ -165,6 +190,11 @@ def repair(stats):
 
 
 def assembling(stats):
+    """
+    Creates a prode
+    :param stats: current state of system elements
+    :return: new state of system elements
+    """
     allow = min(stats.get('алюминий'), stats.get('металл'), stats.get('фотоэлемент'))
     statistics(stats)
     if stats['ремонт'] == 0:
@@ -196,6 +226,12 @@ def assembling(stats):
 
 
 def meteorite_collision(stats):
+    """
+    Reflects the impact of a random event
+    :param stats: current state of the system
+    :return: new state of the system
+    """
+
     enabled = []
     for key in list(stats.keys())[5:-1]:
         if stats[key]:
@@ -217,6 +253,11 @@ def meteorite_collision(stats):
 
 
 def space_debris(stats):
+    """
+        Reflects the impact of a random event
+        :param stats: current state of the system
+        :return: new state of the system
+        """
     resources = {'m1': 'Получен 1 металл', 'm2': 'Получено 2 металла', 'al0': '', 'al1': ', 1 алюминий', 'cell0': '',
                  'cell1': ', 1 фотоэлемент'}
     m, al, cell = randint(1, 2), randint(0, 1), randint(0, 1)
@@ -229,6 +270,11 @@ def space_debris(stats):
 
 
 def electromagnetic_radiation(stats):
+    """
+        Reflects the impact of a random event
+        :param stats: current state of the system
+        :return: new state of the system
+        """
     print('\nКорабль попал в зону действия аномально сильного электромагнитного излучения, контроль над кораблем был '
           'потерян. На перезапуск систем потрачено на один ход больше.\n')
     stats['ходы'] -= 1
@@ -236,6 +282,11 @@ def electromagnetic_radiation(stats):
 
 
 def water(stats):
+    """
+        Reflects the impact of a random event
+        :param stats: current state of the system
+        :return: new state of the system
+        """
     script = {0: 'На одной из планет системы найдена жидкая вода. Отфильтрованная, она может быть применена в пищу или '
                  'для получения кислорода. ',
               1: 'В атмосфере одной из планет системы найдены скопления водяного пара. '
@@ -249,6 +300,11 @@ def water(stats):
 
 
 def cellular_system(stats):
+    """
+        Reflects the impact of a random event
+        :param stats: current state of the system
+        :return: new state of the system
+        """
     if stats['связь'] == 0:
         print('\nПомехи, создаваемые сломанной системой связи, привлекли лишнее внимание.', end='')
         return pirate(stats)
@@ -266,6 +322,11 @@ def cellular_system(stats):
 
 
 def people(stats):
+    """
+    Reflects the impact of a random event
+    :param stats: current state of the system
+    :return: new state of the system
+    """
     resources = {'cell1': 'Получен 1 фотоэлемент', 'cell2': 'Получено 2 фотоэлемента', 'al0': '',
                  'al1': ', 1 алюминий', 'm0': '', 'm1': ', 1 металл', 'm2': ', 2 металла'}
     cell, al, m = randint(1, 2), randint(0, 1), randint(0, 2)
@@ -280,6 +341,11 @@ def people(stats):
 
 
 def prode(stats):
+    """
+        Reflects the impact of a prode launch
+        :param stats: current state of the system
+        :return: new state of the system
+        """
     if stats['зонд'] > 0:
         stats['зонд'] -= 1
         t = randint(0, 2)
@@ -309,12 +375,21 @@ def prode(stats):
 
 
 def name():
+    """
+    Generates a random name
+    :return: random name
+    """
     letters = string.ascii_uppercase
     rand_string = ''.join(sample(letters, 3))
     return 'NSU-I' + rand_string
 
 
 def landing(stats):
+    """
+        Reflects the impact of the landing on the planet
+        :param stats: current state of the system
+        :return: new state of the system
+        """
     if stats['двигатель'] == 0:
         print('Двигательный отсек неисправен. Невозможно совершить посадку.')
         return planet_dial(stats)
@@ -360,6 +435,11 @@ def landing(stats):
 
 
 def planet(stats):
+    """
+        Reflects the impact of a random event
+        :param stats: current state of the system
+        :return: new state of the system
+        """
     object = {0: 'обнаружена планета ', 1: 'обнаружена карликовая планета ',
               2: 'обнаружен спутник '+str(name())+' планеты '}
     sc = randint(0, 2)
@@ -376,6 +456,11 @@ def planet(stats):
 
 
 def planet_dial(stats):
+    """
+    Gives the player the choice of action
+    :param stats: current state of system elements
+    :return: new state of system elements
+    """
     r = input('''Выберите действие, либо введите любой другой символ для выхода:
 1. Отправить зонд
 2. Высадиться на планету (не безопасно)
@@ -388,6 +473,11 @@ def planet_dial(stats):
 
 
 def pirate(stats):
+    """
+        Reflects the impact of a random event
+        :param stats: current state of the system
+        :return: new state of the system
+        """
     print('\nНа вас напали космические пираты. ', end='')
     al = randint(0, 2)
     met = randint(2, 3)
